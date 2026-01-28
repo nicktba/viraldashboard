@@ -176,6 +176,14 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Sort the filtered videos based on sortBy parameter
+    if (sortBy === 'most-liked') {
+      filteredVideos.sort((a, b) => b.statistics.digg_count - a.statistics.digg_count);
+    } else if (sortBy === 'date-posted') {
+      filteredVideos.sort((a, b) => new Date(b.create_time).getTime() - new Date(a.create_time).getTime());
+    }
+    // 'relevance' keeps the original API order
+
     const result: TikTokSearchResultWithMeta = {
       success: true,
       credits_remaining: creditsRemaining,
