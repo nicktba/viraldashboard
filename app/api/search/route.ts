@@ -178,7 +178,16 @@ export async function GET(request: NextRequest) {
 
     // Sort the filtered videos based on sortBy parameter
     if (sortBy === 'most-liked') {
-      filteredVideos.sort((a, b) => b.statistics.digg_count - a.statistics.digg_count);
+      filteredVideos.sort((a, b) => {
+        const aLikes = a.statistics?.digg_count ?? 0;
+        const bLikes = b.statistics?.digg_count ?? 0;
+        return bLikes - aLikes;
+      });
+      // Debug: log first few videos to verify sorting
+      console.log('Sorted by likes:', filteredVideos.slice(0, 5).map(v => ({
+        desc: v.desc?.slice(0, 30),
+        likes: v.statistics?.digg_count
+      })));
     } else if (sortBy === 'date-posted') {
       filteredVideos.sort((a, b) => new Date(b.create_time).getTime() - new Date(a.create_time).getTime());
     }
