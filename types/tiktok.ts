@@ -102,7 +102,7 @@ export type PublishTime =
   | 'last-6-months'
   | 'all-time';
 
-export type SortBy = 'relevance' | 'most-liked' | 'date-posted';
+export type SortBy = 'relevance' | 'most-liked' | 'most-commented' | 'date-posted';
 
 export interface SearchParams {
   query: string;

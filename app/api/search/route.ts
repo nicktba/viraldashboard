@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { TikTokItem, PublishTime, TikTokSearchResultWithMeta } from '@/types/tiktok';
 
-const MAX_PAGES = 5;
+const MAX_PAGES = 15;
 const VIDEOS_PER_PAGE = 30; // TikTok API typically returns 30 per page
 
 // Get the date range for a given publish time filter
@@ -133,8 +133,8 @@ export async function GET(request: NextRequest) {
 
   try {
     // Fetch all pages in parallel for speed
-    // Cursors are typically 0, 30, 60, 90, 120 (30 per page)
-    const cursors = [0, 30, 60, 90, 120];
+    // Cursors are typically 0, 30, 60, 90, 120... (30 per page)
+    const cursors = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420];
     
     const pagePromises = cursors.slice(0, MAX_PAGES).map(cursor => 
       fetchPage(apiKey, query, publishTime, sortBy, cursor === 0 ? undefined : cursor)
@@ -187,6 +187,16 @@ export async function GET(request: NextRequest) {
       console.log('Sorted by likes:', filteredVideos.slice(0, 5).map(v => ({
         desc: v.desc?.slice(0, 30),
         likes: v.statistics?.digg_count
+      })));
+    } else if (sortBy === 'most-commented') {
+      filteredVideos.sort((a, b) => {
+        const aComments = a.statistics?.comment_count ?? 0;
+        const bComments = b.statistics?.comment_count ?? 0;
+        return bComments - aComments;
+      });
+      console.log('Sorted by comments:', filteredVideos.slice(0, 5).map(v => ({
+        desc: v.desc?.slice(0, 30),
+        comments: v.statistics?.comment_count
       })));
     } else if (sortBy === 'date-posted') {
       filteredVideos.sort((a, b) => new Date(b.create_time).getTime() - new Date(a.create_time).getTime());

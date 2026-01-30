@@ -20,6 +20,7 @@ const publishTimeOptions: { value: PublishTime; label: string }[] = [
 const sortByOptions: { value: SortBy; label: string }[] = [
   { value: 'relevance', label: 'Relevance' },
   { value: 'most-liked', label: 'Most Liked' },
+  { value: 'most-commented', label: 'Most Comments' },
   { value: 'date-posted', label: 'Date Posted' },
 ];
 
