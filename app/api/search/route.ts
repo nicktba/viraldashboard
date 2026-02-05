@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { TikTokItem, PublishTime, TikTokSearchResultWithMeta } from '@/types/tiktok';
 
-const MAX_PAGES = 15;
+const MAX_PAGES = 30;
 const VIDEOS_PER_PAGE = 30; // TikTok API typically returns 30 per page
 
 // Get the date range for a given publish time filter
@@ -134,7 +134,7 @@ export async function GET(request: NextRequest) {
   try {
     // Fetch all pages in parallel for speed
     // Cursors are typically 0, 30, 60, 90, 120... (30 per page)
-    const cursors = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420];
+    const cursors = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480, 510, 540, 570, 600, 630, 660, 690, 720, 750, 780, 810, 840, 870];
     
     const pagePromises = cursors.slice(0, MAX_PAGES).map(cursor => 
       fetchPage(apiKey, query, publishTime, sortBy, cursor === 0 ? undefined : cursor)
